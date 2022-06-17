@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "orchestrator",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,5 +8,11 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^3.9.0",
+    "axios": "^0.27.2",
+    "dotenv": "^16.0.1",
+    "ioredis": "^5.0.6"
+  }
 }
