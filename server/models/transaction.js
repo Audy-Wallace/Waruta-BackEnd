@@ -14,7 +14,10 @@ module.exports = (sequelize, DataTypes) => {
   Transaction.init(
     {
       price: DataTypes.INTEGER,
-      status: DataTypes.STRING,
+      status: {
+        type: DataTypes.STRING,
+        defaultValue: "unfinished",
+      },
       userId: DataTypes.INTEGER,
     },
     {
