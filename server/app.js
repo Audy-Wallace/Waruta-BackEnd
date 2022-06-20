@@ -48,4 +48,4 @@ io.on("connection", (socket) => {
 server.listen(port, () => {
   console.log("This app is running at port:", port);
 });
-module.exports = server;
+module.exports = { server };

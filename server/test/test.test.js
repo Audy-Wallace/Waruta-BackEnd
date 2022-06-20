@@ -1,5 +1,6 @@
-const server = require("../app");
-const { User, Leaderboard } = require("../models");
+const { server } = require("../app");
+const { Server } = require("socket.io");
+const { User, Leaderboard, Transaction, Room } = require("../models");
 const request = require("supertest");
 const { payloadToToken } = require("../helpers/jwt");
 let token;
@@ -75,11 +76,54 @@ describe("test suite for users route", () => {
       });
       expect(response.statusCode).toBe(200);
     });
-    test("LOGIN FAILED", async () => {
-      const response = await request(server).post("/users/login").send({
-        email: "",
-        password: "",
-      });
+    test("INVALID EMAIL", async () => {
+      try {
+        const response = await request(server).post("/users/login").send({
+          email: "",
+          password: "12345678",
+        });
+        expect(response.statusCode).toBe(401);
+      } catch (error) {
+        console.log(error);
+      }
+    });
+    test("INVALID PASSWORD", async () => {
+      try {
+        const response = await request(server).post("/users/login").send({
+          email: "test@mail.com",
+          password: "",
+        });
+        expect(response.statusCode).toBe(401);
+      } catch (error) {
+        console.log(error);
+      }
+    });
+  });
+  describe("GET /midtrans", () => {
+    test("GET SUCCESS", async () => {
+      const response = await request(server)
+        .get("/users/midtrans")
+        .set("access_token", token);
+      expect(response.statusCode).toBe(200);
+    });
+    test("INVALID TOKEN", async () => {
+      const response = await request(server)
+        .get("/users/midtrans")
+        .set("access_token", "token ngasal");
+      expect(response.statusCode).toBe(401);
+    });
+  });
+  describe("PATCH /premium", () => {
+    test("PATCH SUCCESS", async () => {
+      const response = await request(server)
+        .patch("/users/premium")
+        .set("access_token", token);
+      expect(response.statusCode).toBe(200);
+    });
+    test("INVALID TOKEN", async () => {
+      const response = await request(server)
+        .patch("/users/premium")
+        .set("access_token", "token ngasal");
       expect(response.statusCode).toBe(401);
     });
   });
@@ -104,13 +148,71 @@ describe("test suite for leaderboard route", () => {
         });
       expect(response.statusCode).toBe(201);
     });
+    test("Invalid Token", async () => {
+      const response = await request(server)
+        .post("/leaderboard")
+        .set("access_token", "token ngasal")
+        .send({
+          time: 10,
+          guess: 2,
+          score: 100,
+        });
+      expect(response.statusCode).toBe(401);
+    });
+  });
+});
+describe("test suite for rooms route", () => {
+  describe("POST /rooms", () => {
+    test("POST SUCCESS", async () => {
+      const response = await request(server)
+        .post("/rooms")
+        .set("access_token", token)
+        .send({
+          roomCode: "123456",
+        });
+      expect(response.statusCode).toBe(201);
+    });
+  });
+  describe("PATCH /rooms", () => {
+    test("PATCH SUCCESS", async () => {
+      const response = await request(server)
+        .patch("/rooms")
+        .set("access_token", token)
+        .send({
+          roomCode: "123456",
+        });
+      expect(response.statusCode).toBe(200);
+    });
+    test("PATCH FAIL NO ROOM FOUND", async () => {
+      const response = await request(server)
+        .patch("/rooms")
+        .set("access_token", token)
+        .send({
+          roomCode: "1234",
+        });
+      expect(response.statusCode).toBe(404);
+    });
+    test("PATCH FAIL", async () => {
+      const response = await request(server)
+        .patch("/rooms")
+        .set("access_token", token)
+        .send({
+          roomCode: "123456",
+        });
+      expect(response.statusCode).toBe(403);
+    });
   });
 });
 afterAll(async () => {
   try {
+    const deletedTransactions = await Transaction.destroy({
+      where: {},
+    });
+    const deletedRooms = await Room.destroy({
+      where: {},
+    });
     const totalDeleted = await Leaderboard.destroy({
       where: {},
-      truncate: true,
     });
     const deletedUsers = await User.destroy({
       where: {},
