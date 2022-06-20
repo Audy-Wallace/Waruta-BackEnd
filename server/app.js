@@ -7,16 +7,16 @@ const router = require("./routes");
 const port = process.env.PORT || 3000;
 const errorHandler = require("./middlewares/errorHandler");
 const cors = require("cors");
-const path = require("path")
-const http = require("http")
-const {Server} = require("socket.io");
+const path = require("path");
+const http = require("http");
+const { Server } = require("socket.io");
 // perhatikan
-const server = http.createServer(app)
+const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:8080'
-  }
-})
+    origin: "http://localhost:8080",
+  },
+});
 
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
@@ -32,18 +32,18 @@ io.on("connection", (socket) => {
     //   socketId: socket.id,
     //   turn: false
     // }
-    payload.users = [...payload.users, payload.username]
-    socket.emit("connecting", payload)
+    payload.users = [...payload.users, payload.username];
+    socket.emit("connecting", payload);
     // console.log(payload, ">>>>>>>>>>>");
-  })
+  });
 
   socket.on("hitAnswer", (payload) => {
     // console.log(payload);
     // payload.currentPlayer = payload.username;
-    console.log(payload.username);
-    io.to(payload.roomId).emit("backAnswer", payload)
-  })
-})
+    // console.log(payload.username);
+    io.to(payload.roomId).emit("backAnswer", payload);
+  });
+});
 
 server.listen(port, () => {
   console.log("This app is running at port:", port);

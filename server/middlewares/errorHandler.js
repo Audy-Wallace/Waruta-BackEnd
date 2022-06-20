@@ -41,7 +41,7 @@ const errorHandler = (error, req, res, next) => {
       message: "Email already exists",
     });
   } else {
-    console.log(error);
+    // console.log(error);
     res.status(500).json({
       statusCode: 500,
       message: "Internal Server Error",
