@@ -24,7 +24,7 @@ class UserController {
         imgUrl,
       });
 
-      const payload = { id: user.id, role: user.role };
+      const payload = { id: user.id };
 
       const token = payloadToToken(payload);
 
@@ -57,7 +57,11 @@ class UserController {
         throw { name: "INVALID_PASSWORD" };
       }
 
-      const payload = { id: user.id, role: user.role };
+      const payload = {
+        id: user.id,
+        username: user.username,
+        isPremium: user.isPremium,
+      };
 
       const token = payloadToToken(payload);
 
@@ -134,8 +138,16 @@ class UserController {
         }
       );
 
+      const payload = {
+        id: req.user.id,
+        username: req.user.username,
+        isPremium: true,
+      };
+
+      const token = payloadToToken(payload);
       res.status(200).json({
         message: "User's premium status has been changed",
+        access_token: token
       });
     } catch (error) {
       next(error);

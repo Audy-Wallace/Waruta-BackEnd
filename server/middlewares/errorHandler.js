@@ -10,16 +10,6 @@ const errorHandler = (error, req, res, next) => {
       statusCode: 400,
       message: newError[0],
     });
-  } else if (error.statusCode === 404) {
-    res.status(404).json({
-      statusCode: 404,
-      message: "Not Found",
-    });
-  } else if (error.statusCode === 403) {
-    res.status(403).json({
-      statusCode: 403,
-      message: "Forbidden",
-    });
   } else if (error.name === "INVALID_PASSWORD") {
     res.status(401).json({
       statusCode: 401,
