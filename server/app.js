@@ -25,6 +25,7 @@ app.use(express.json())
 app.use("/", router)
 app.use(errorHandler)
 
+let randomIndex = 0;
 io.on("connection", (socket) => {
   socket.on("joinWaitingRoom", (payload) => {
     socket.join(payload.roomId)
@@ -48,29 +49,23 @@ io.on("connection", (socket) => {
         // socketId: usersId
       })
     }
+    if(totalUser.size === 1) {
+      const random = Math.floor(Math.random() * payload.amoutWords); //words.length
+      randomIndex = random
+    }
     //test buat commit
     console.log(totalUser.size, "is connect")
     // let usersId = []
     // usersId = [...usersId, socket.id]
     // usersId.push(socket.id)
-    io.to(payload.roomId).emit("joinedWaitingRoom", {
-      users: totalUser.size,
-      // socketId: usersId
-    })
+    io.to(payload.roomId).emit("joinedWaitingRoom", 
+      {
+        totalUser: totalUser.size, randomIndex: randomIndex})
   })
-  //
-  // socket.on("joinGame", (payload) => {
-  //   socket.join(payload.roomId);
-  //   let users = io.sockets.adapter.rooms.get(payload.roomId);
-  //   socket.to(payload.roomId).emit("joinedGame")
 
-  //   console.log(users.size, "is connect");
-  // })
-
-  socket.on("totalUser", (payload) => {})
 
   socket.on("hitAnswer", (payload) => {
-    console.log(payload)
+    let totalUser = io.sockets.adapter.rooms.get(payload.roomId);
     io.to(payload.roomId).emit("backAnswer", payload)
   })
 })
