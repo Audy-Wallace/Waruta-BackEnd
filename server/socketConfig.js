@@ -1,4 +1,3 @@
-//
 const server = require("./bin/http");
 const io = require("socket.io")(server, {
   cors: {
@@ -9,7 +8,6 @@ const io = require("socket.io")(server, {
   },
   allowEIO3: true
 });
-
 let randomIndex = 0;
 io.on("connection", (socket) => {
   socket.on("joinWaitingRoom", (payload) => {
