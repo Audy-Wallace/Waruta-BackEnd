@@ -68,6 +68,7 @@ class UserController {
       res.status(200).json({
         message: "User logged in successfully",
         access_token: token,
+        isPremium: user.isPremium
       });
     } catch (error) {
       next(error);
