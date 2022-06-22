@@ -61,6 +61,7 @@ class UserController {
         id: user.id,
         username: user.username,
         isPremium: user.isPremium,
+        email: user.email
       };
 
       const token = payloadToToken(payload);
@@ -68,6 +69,7 @@ class UserController {
       res.status(200).json({
         message: "User logged in successfully",
         access_token: token,
+        email: user.email
       });
     } catch (error) {
       next(error);

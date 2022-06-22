@@ -31,21 +31,23 @@ describe("Suite of unit tests", function () {
     done();
   });
   describe("room test", () => {
-    test("waiting room", (done) => {
-      socket.emit("joinWaitingRoom", { roomId: "room1" });
-      socket.on("joinedWaitingRoom", (data) => {
-        expect(data.roomId).toBe("room1");
+    // test("waiting room", (done) => {
+    //   socket.emit("joinWaitingRoom", { roomId: "room1" });
+    //   socket.on("joinedWaitingRoom", (data) => {
+    //     expect(data.roomId).toBe("room1");
+    //   });
+    //   done();
+    // });
+    test.only("game room", (done) => {
+      socket.emit("joinWaitingRoom", { roomId: "room1", amoutWords: 10});
+      socket.on("joinedWaitingRoom", (payload) => {
+        expect(payload).toHaveProperty("totalUser");
+        expect(payload).toHaveProperty("randomIndex");
+        console.log('====================================');
+        console.log(payload);
+        console.log('====================================');
+        done();
       });
-      done();
-    });
-    test("game room", (done) => {
-      socket.emit("joinWaitingRoom", { roomId: "room1" });
-      socket.on("joinedWaitingRoom", () => {
-        socket.join(payload.roomId);
-        let totalUser = socket.sockets.adapter.rooms.get(payload.roomId);
-        expect(totalUser.size).toBe("bhdhsdhsbdh");
-      });
-      done();
     });
     test("join game", (done) => {
       socket.emit("joinGame", { roomId: "room1" });
@@ -54,10 +56,16 @@ describe("Suite of unit tests", function () {
       });
       done();
     });
+    // test("total user", (done) => {
+    //   // socket.join("room1");
+    //   let totalUser = server.sockets.adapter.rooms.get("room1");
+    //   expect(totalUser).toBeDefined();
+    //   done();
+    // });
     test("hitAnswer", (done) => {
       socket.emit("hitAnswer", { roomId: "room1" });
       socket.on("hitAnswer", (payload) => {
-        expect(payload.roomId).toBe("room1");
+        expect(totalUser).toBeDefined();
       });
       done();
     });

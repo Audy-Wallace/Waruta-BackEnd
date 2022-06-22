@@ -32,11 +32,6 @@ class LeaderboardController {
         message: "created successfully",
       });
     } catch (error) {
-      console.log(
-        "🚀 ~ file: leaderboard.js ~ line 36 ~ LeaderboardController ~ makeLeaderboard ~ error",
-        error
-      );
-
       next(error);
     }
   }
