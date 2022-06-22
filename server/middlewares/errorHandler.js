@@ -1,4 +1,5 @@
 const errorHandler = (error, req, res, next) => {
+  console.log(error);
   if (error.statusCode === 401) {
     res.status(401).json({
       statusCode: 401,
@@ -31,7 +32,7 @@ const errorHandler = (error, req, res, next) => {
       message: "Email already exists",
     });
   } else {
-    // console.log(error);
+    console.log(error);
     res.status(500).json({
       statusCode: 500,
       message: "Internal Server Error",
