@@ -7,6 +7,7 @@ class LeaderboardController {
         include: {
           model: User,
         },
+        order: [['score', 'DESC']]
       });
 
       res.status(200).json(leadboard);

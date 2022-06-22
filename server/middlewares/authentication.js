@@ -6,7 +6,6 @@ const authentication = async (req, res, next) => {
     const { access_token } = req.headers;
     const payload = tokenToPayload(access_token);
     const userFound = await User.findByPk(payload.id);
-
     if (!userFound) {
       throw { statusCode: 401 };
     } else {
@@ -14,6 +13,7 @@ const authentication = async (req, res, next) => {
         id: userFound.id,
         email: userFound.email,
         isPremium: userFound.isPremium,
+        username: userFound.username
       };
     }
 

@@ -1,6 +1,5 @@
-const { server } = require("../app");
-const { Server } = require("socket.io");
-const { User, Leaderboard, Transaction, Room } = require("../models");
+const server = require('../bin/http');
+const { User, Leaderboard, Transaction } = require("../models");
 const request = require("supertest");
 const { payloadToToken } = require("../helpers/jwt");
 let token;
@@ -75,6 +74,13 @@ describe("test suite for users route", () => {
         password: "12345678",
       });
       expect(response.statusCode).toBe(200);
+    });
+    test("WRONG PASSWORD", async () => {
+      const response = await request(server).post("/users/login").send({
+        email: "urmum@mail.com",
+        password: "12345",
+      });
+      expect(response.statusCode).toBe(401);
     });
     test("INVALID EMAIL", async () => {
       try {
@@ -159,56 +165,42 @@ describe("test suite for leaderboard route", () => {
         });
       expect(response.statusCode).toBe(401);
     });
-  });
-});
-describe("test suite for rooms route", () => {
-  describe("POST /rooms", () => {
-    test("POST SUCCESS", async () => {
+    test("Auth Fail", async () => {
+      const payload = {
+        id: 5,
+      };
+      const token = payloadToToken(payload);
+      console.log(token, "ppppppppppppppppp");
       const response = await request(server)
-        .post("/rooms")
+        .post("/leaderboard")
         .set("access_token", token)
         .send({
-          roomCode: "123456",
+          time: 10,
+          guess: 2,
+          score: 100,
         });
-      expect(response.statusCode).toBe(201);
+      expect(response.statusCode).toBe(401);
     });
-  });
-  describe("PATCH /rooms", () => {
-    test("PATCH SUCCESS", async () => {
+    test("ISE", async () => {
+      const payload = {
+        id: "bla bla",
+      };
+      const token = payloadToToken(payload);
       const response = await request(server)
-        .patch("/rooms")
+        .post("/leaderboard")
         .set("access_token", token)
         .send({
-          roomCode: "123456",
+          time: 10,
+          guess: 2,
+          score: 100,
         });
-      expect(response.statusCode).toBe(200);
-    });
-    test("PATCH FAIL NO ROOM FOUND", async () => {
-      const response = await request(server)
-        .patch("/rooms")
-        .set("access_token", token)
-        .send({
-          roomCode: "1234",
-        });
-      expect(response.statusCode).toBe(404);
-    });
-    test("PATCH FAIL", async () => {
-      const response = await request(server)
-        .patch("/rooms")
-        .set("access_token", token)
-        .send({
-          roomCode: "123456",
-        });
-      expect(response.statusCode).toBe(403);
+      expect(response.statusCode).toBe(500);
     });
   });
 });
 afterAll(async () => {
   try {
     const deletedTransactions = await Transaction.destroy({
-      where: {},
-    });
-    const deletedRooms = await Room.destroy({
       where: {},
     });
     const totalDeleted = await Leaderboard.destroy({
