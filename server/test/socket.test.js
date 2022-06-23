@@ -38,14 +38,11 @@ describe("Suite of unit tests", function () {
     //   });
     //   done();
     // });
-    test.only("game room", (done) => {
+    test("game room", (done) => {
       socket.emit("joinWaitingRoom", { roomId: "room1", amoutWords: 10});
       socket.on("joinedWaitingRoom", (payload) => {
         expect(payload).toHaveProperty("totalUser");
         expect(payload).toHaveProperty("randomIndex");
-        console.log('====================================');
-        console.log(payload);
-        console.log('====================================');
         done();
       });
     });
