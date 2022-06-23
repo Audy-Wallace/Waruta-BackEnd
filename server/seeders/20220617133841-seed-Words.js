@@ -18,7 +18,7 @@ module.exports = {
         color: "orange",
         ingredient: "krupuk",
         taste: "spicy",
-        clue: "Liked by ughtea naughty from twitter",
+        clue: "Tidak lazim direbus",
         imgUrl:
           "https://img-global.cpcdn.com/recipes/742c57b6f5780625/160x160cq70/seblak-kuah-pedas-foto-resep-utama.jpg",
       },
@@ -28,7 +28,7 @@ module.exports = {
         color: "yellow",
         ingredient: "flour",
         taste: "umami",
-        clue: "MSG GUE GAK PEDULI!",
+        clue: "King of MSG",
         imgUrl:
           "https://images-na.ssl-images-amazon.com/images/I/31sdotKodgL._AC_UL160_SR160,160_.jpg",
       },
@@ -38,7 +38,7 @@ module.exports = {
         color: "yellow",
         ingredient: "flour",
         taste: "umami",
-        clue: "Long Sluuurping",
+        clue: "Tepung terigu",
         imgUrl:
           "https://s3-media3.fl.yelpcdn.com/bphoto/nRV-RPsu0fFdpLFgS03Jcw/168s.jpg",
       },
@@ -48,7 +48,7 @@ module.exports = {
         color: "golden brown",
         ingredient: "meat",
         taste: "umami",
-        clue: "street food",
+        clue: "Bumbu kacang",
         imgUrl:
           "https://dikemas.com/uploads/2019/05/resep-batagor-enak-yang-bisa-kamu-jadikan-ladang-bisnis-180x145.jpg",
       },
